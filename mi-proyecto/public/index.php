@@ -1,38 +1,92 @@
 <?php
 // public/index.php
 
-// Iniciar sesión una sola vez
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-// Cargar el controlador de usuarios
+// Controladores
 require_once __DIR__ . '/../app/controllers/UsuarioController.php';
+require_once __DIR__ . '/../app/controllers/CultivoController.php';
+require_once __DIR__ . '/../app/controllers/CategoriaController.php';
 
-// Crear el controlador (si necesita DB, pasar $db)
-$controller = new UsuarioController();
 
-// Capturar la acción desde la URL
+// Acción desde la URL
 $action = $_GET['action'] ?? 'login';
 
 // Router básico
 switch ($action) {
+    // --- Usuarios ---
     case 'registrar':
-        $controller->registrar();
+        (new UsuarioController())->registrar();
         break;
     case 'login':
-        $controller->login();
+        (new UsuarioController())->login();
         break;
     case 'logout':
-        $controller->logout();
+        (new UsuarioController())->logout();
         break;
     case 'usuarios':
-        $controller->index(); 
+        (new UsuarioController())->index(); 
         break;
     case 'dashboard':
-        $controller->dashboard();
+        (new UsuarioController())->dashboard();
         break;
+
+    // --- Cultivos ---
+    case 'cultivos':
+        (new CultivoController())->index();
+        break;
+    case 'ver_cultivo':
+        $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+        (new CultivoController())->show($id);
+        break;
+    case 'crear_cultivo':
+        (new CultivoController())->create();
+        break;
+    case 'guardar_cultivo':
+        (new CultivoController())->store();
+        break;
+    case 'editar_cultivo':
+        $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+        (new CultivoController())->edit($id);
+        break;
+    case 'actualizar_cultivo':
+        $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+        (new CultivoController())->update($id);
+        break;
+    case 'eliminar_cultivo':
+        $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+        (new CultivoController())->destroy($id);
+        break;
+
+
+    // --- Categorías ---
+    case 'categorias':
+    (new CategoriaController())->index();
+    break;
+case 'nueva_categoria':
+    (new CategoriaController())->create();
+    break;
+case 'guardar_categoria':
+    (new CategoriaController())->store();
+    break;
+case 'editar_categoria':
+    $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+    (new CategoriaController())->edit($id);
+    break;
+case 'actualizar_categoria':
+    $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+    (new CategoriaController())->update($id);
+    break;
+case 'eliminar_categoria':
+    $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+    (new CategoriaController())->destroy($id);
+    break;
+
+
+    // --- Default ---
     default:
-        $controller->login();
+        (new UsuarioController())->login();
         break;
 }
