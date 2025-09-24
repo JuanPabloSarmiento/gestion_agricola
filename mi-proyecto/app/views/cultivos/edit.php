@@ -1,3 +1,5 @@
+<h2>Editar Cultivo</h2>
+
 <?php if (!empty($_SESSION['errors'])): ?>
     <div class="alert alert-danger">
         <ul>
@@ -9,11 +11,7 @@
     <?php unset($_SESSION['errors']); ?>
 <?php endif; ?>
 
-<h2>Editar Cultivo</h2>
-
 <form method="POST" action="/mi-proyecto/public/index.php?action=actualizar_cultivo&id=<?= $cultivo['id_cultivo'] ?>">
-    <input type="hidden" name="id_cultivo" value="<?= $cultivo['id_cultivo'] ?>">
-
     <label for="nombre">Nombre*</label>
     <input type="text" name="nombre" id="nombre" value="<?= htmlspecialchars($cultivo['nombre']) ?>" required>
 
@@ -32,6 +30,17 @@
     <label for="fecha_fin">Fecha Fin</label>
     <input type="date" name="fecha_fin" id="fecha_fin" value="<?= htmlspecialchars($cultivo['fecha_fin']) ?>">
 
+    <label for="categorias">Categorías*</label>
+    <select name="categorias[]" id="categorias" multiple required>
+        <?php foreach ($categorias as $cat): ?>
+            <option value="<?= $cat['id_categoria'] ?>"
+                <?= in_array($cat['id_categoria'], array_column($cultivo['categorias'], 'id_categoria')) ? 'selected' : '' ?>>
+                <?= htmlspecialchars($cat['nombre']) ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
+
     <button type="submit">Actualizar</button>
 </form>
 
+<a href="/mi-proyecto/public/index.php?action=cultivos">Volver</a>

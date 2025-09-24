@@ -27,15 +27,21 @@
         </tr>
     </thead>
     <tbody>
-        <?php foreach ($categorias as $cat): ?>
-        <tr>
-            <td><?= $cat['id_categoria'] ?></td>
-            <td><?= htmlspecialchars($cat['nombre']) ?></td>
-            <td>
-                <a href="/mi-proyecto/public/index.php?action=editar_categoria&id=<?= $cat['id_categoria'] ?>">Editar</a> |
-                <a href="/mi-proyecto/public/index.php?action=eliminar_categoria&id=<?= $cat['id_categoria'] ?>" onclick="return confirm('¿Eliminar esta categoría?')">Eliminar</a>
-            </td>
-        </tr>
-        <?php endforeach; ?>
+        <?php if (!empty($categorias) && is_array($categorias)): ?>
+            <?php foreach ($categorias as $cat): ?>
+                <tr>
+                    <td><?= $cat['id_categoria'] ?></td>
+                    <td><?= htmlspecialchars($cat['nombre']) ?></td>
+                    <td>
+                        <a href="/mi-proyecto/public/index.php?action=editar_categoria&id=<?= $cat['id_categoria'] ?>">Editar</a> |
+                        <a href="/mi-proyecto/public/index.php?action=eliminar_categoria&id=<?= $cat['id_categoria'] ?>" onclick="return confirm('¿Eliminar esta categoría?')">Eliminar</a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <tr>
+                <td colspan="3">No hay categorías registradas.</td>
+            </tr>
+        <?php endif; ?>
     </tbody>
 </table>

@@ -75,6 +75,7 @@ class UsuarioController
 
             if ($usuario) {
                 $_SESSION['usuario'] = $usuario;
+                 $_SESSION['role'] = ($usuario['id_rol'] == 1) ? 'admin' : 'user';
                 header("Location: /mi-proyecto/public/index.php?action=dashboard");
                 exit;
             } else {

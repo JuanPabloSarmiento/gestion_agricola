@@ -14,6 +14,10 @@
 <form method="POST" action="/mi-proyecto/public/index.php?action=guardar_categoria">
     <label for="nombre">Nombre*</label>
     <input type="text" id="nombre" name="nombre" required>
+
+    <input type="text" name="tipo" value="General">
+    <input type="hidden" name="fecha_ingreso" value="<?= date('Y-m-d') ?>">
+
     <button type="submit">Guardar</button>
 </form>
 

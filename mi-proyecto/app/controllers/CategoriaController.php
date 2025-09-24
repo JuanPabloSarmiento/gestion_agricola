@@ -25,6 +25,10 @@ class CategoriaController
         }
 
         $categorias = $this->categoriaModel->all();
+        if (!is_array($categorias)) {
+            $categorias = []; // Evita errores en la vista
+        }
+
         include __DIR__ . '/../views/categorias/index.php';
     }
 
@@ -56,11 +60,11 @@ class CategoriaController
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $nombre = trim($_POST['nombre'] ?? '');
             $descripcion = trim($_POST['descripcion'] ?? '');
+            $tipo = trim($_POST['tipo'] ?? 'General'); // valor por defecto
+            $fecha_ingreso = date('Y-m-d');            // fecha actual por defecto
 
             $errors = [];
-            if ($nombre === '') {
-                $errors[] = "El campo 'Nombre' es obligatorio.";
-            }
+            if ($nombre === '') $errors[] = "El campo 'Nombre' es obligatorio.";
 
             if (!empty($errors)) {
                 $_SESSION['errors'] = $errors;
@@ -69,8 +73,9 @@ class CategoriaController
             }
 
             $data = [
-                'nombre' => $nombre,
-                'descripcion' => $descripcion !== '' ? $descripcion : null,
+                'nombre'       => $nombre,
+                'tipo'         => $tipo,
+                'fecha_ingreso'=> $fecha_ingreso
             ];
 
             $this->categoriaModel->create($data);
@@ -112,31 +117,32 @@ class CategoriaController
             exit;
         }
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $nombre = trim($_POST['nombre'] ?? '');
-            $descripcion = trim($_POST['descripcion'] ?? '');
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') return;
 
-            $errors = [];
-            if ($nombre === '') {
-                $errors[] = "El campo 'Nombre' es obligatorio.";
-            }
+        $nombre = trim($_POST['nombre'] ?? '');
+        $descripcion = trim($_POST['descripcion'] ?? '');
+        $tipo = trim($_POST['tipo'] ?? 'General');          // valor por defecto
+        $fecha_ingreso = $_POST['fecha_ingreso'] ?? date('Y-m-d'); // valor por defecto
 
-            if (!empty($errors)) {
-                $_SESSION['errors'] = $errors;
-                header("Location: /mi-proyecto/public/index.php?action=editar_categoria&id=$id");
-                exit;
-            }
+        $errors = [];
+        if ($nombre === '') $errors[] = "El campo 'Nombre' es obligatorio.";
 
-            $data = [
-                'nombre' => $nombre,
-                'descripcion' => $descripcion !== '' ? $descripcion : null,
-            ];
-
-            $this->categoriaModel->update($id, $data);
-            $_SESSION['success'] = "Categoría actualizada con éxito.";
-            header("Location: /mi-proyecto/public/index.php?action=categorias");
+        if (!empty($errors)) {
+            $_SESSION['errors'] = $errors;
+            header("Location: /mi-proyecto/public/index.php?action=editar_categoria&id=$id");
             exit;
         }
+
+        $data = [
+            'nombre'        => $nombre,
+            'tipo'          => $tipo,
+            'fecha_ingreso' => $fecha_ingreso
+        ];
+
+        $this->categoriaModel->update($id, $data);
+        $_SESSION['success'] = "Categoría actualizada con éxito.";
+        header("Location: /mi-proyecto/public/index.php?action=categorias");
+        exit;
     }
 
     /**

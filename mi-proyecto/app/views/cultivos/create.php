@@ -1,5 +1,16 @@
 <h2>Registrar Cultivo</h2>
 
+<?php if (!empty($_SESSION['errors'])): ?>
+    <div class="alert alert-danger">
+        <ul>
+            <?php foreach ($_SESSION['errors'] as $error): ?>
+                <li><?= htmlspecialchars($error); ?></li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+    <?php unset($_SESSION['errors']); ?>
+<?php endif; ?>
+
 <form method="POST" action="/mi-proyecto/public/index.php?action=guardar_cultivo">
     <label for="nombre">Nombre*</label>
     <input type="text" name="nombre" id="nombre" required>
@@ -19,15 +30,14 @@
     <label for="fecha_fin">Fecha Fin</label>
     <input type="date" name="fecha_fin" id="fecha_fin">
 
-    <!-- Aquí listamos las categorías disponibles -->
-    <label for="categorias">Categorías</label>
-    <select name="categorias[]" id="categorias" multiple>
+    <label for="categorias">Categorías*</label>
+    <select name="categorias[]" id="categorias" required>
         <?php foreach ($categorias as $cat): ?>
-            <option value="<?= $cat['id_categoria'] ?>">
-                <?= htmlspecialchars($cat['nombre']) ?>
-            </option>
+            <option value="<?= $cat['id_categoria'] ?>"><?= htmlspecialchars($cat['nombre']) ?></option>
         <?php endforeach; ?>
     </select>
 
     <button type="submit">Guardar</button>
 </form>
+
+<a href="/mi-proyecto/public/index.php?action=cultivos">Volver</a>

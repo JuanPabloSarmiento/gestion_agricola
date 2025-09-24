@@ -14,6 +14,11 @@
 <form method="POST" action="/mi-proyecto/public/index.php?action=actualizar_categoria&id=<?= $categoria['id_categoria'] ?>">
     <label for="nombre">Nombre*</label>
     <input type="text" id="nombre" name="nombre" value="<?= htmlspecialchars($categoria['nombre']); ?>" required>
+
+    <!-- Mantener valores obligatorios con hidden -->
+    <input type="hidden" name="tipo" value="<?= htmlspecialchars($categoria['tipo']); ?>">
+    <input type="hidden" name="fecha_ingreso" value="<?= htmlspecialchars($categoria['fecha_ingreso']); ?>">
+
     <button type="submit">Actualizar</button>
 </form>
 

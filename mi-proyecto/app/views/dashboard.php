@@ -35,9 +35,18 @@ $rolNombre = $roles[$usuario['id_rol']] ?? 'Desconocido';
 
     <!-- Botón solo para administradores -->
     <?php if ($esAdmin): ?>
-        <p>
-            <a href="/mi-proyecto/public/index.php?action=usuarios">Ver Usuarios</a>
-        </p>
+        <ul>
+            <li><a href="/mi-proyecto/public/index.php?action=nueva_categoria">Crear Categoría</a></li>
+            <li><a href="/mi-proyecto/public/index.php?action=categorias">Ver Categorías</a></li>
+            <li><a href="/mi-proyecto/public/index.php?action=usuarios">Ver Usuarios</a></li>
+            <li><a href="/mi-proyecto/public/index.php?action=crear_cultivo">Crear Cultivo</a></li>
+            <li><a href="/mi-proyecto/public/index.php?action=cultivos">Ver Cultivos</a></li>
+        </ul>
+            
+            
+        
+            
+        
     <?php endif; ?>
 
     <!-- Logout -->

@@ -16,12 +16,13 @@ class Cultivo extends Model
      */
     public function create(array $data, array $categorias = []): int
     {
-        // Insertar cultivo
+        // Insertar cultivo usando insert() del Model
         $idCultivo = $this->insert($data);
 
-        // Asignar categorías
-        if (!empty($categorias)) {
-            $this->syncCategories($idCultivo, $categorias);
+        // Insertar relaciones con categorías
+        foreach ($categorias as $idCategoria) {
+            $sql = "INSERT INTO cultivo_categoria (id_cultivo, id_categoria) VALUES (?, ?)";
+            Database::execute($sql, [$idCultivo, $idCategoria]);
         }
 
         return $idCultivo;
@@ -30,26 +31,22 @@ class Cultivo extends Model
     /**
      * Actualizar cultivo y sincronizar categorías
      */
-    public function updateWithCategories(int $idCultivo, array $data, array $categorias = [])
+    public function updateWithCategories(int $idCultivo, array $data, array $categorias = []): int
     {
+        // Actualizar cultivo
         $this->update($idCultivo, $data);
-        $this->syncCategories($idCultivo, $categorias);
-    }
 
-    /**
-     * Sincronizar categorías de un cultivo
-     */
-    public function syncCategories(int $idCultivo, array $categorias)
-    {
         // Eliminar relaciones existentes
         $sqlDelete = "DELETE FROM cultivo_categoria WHERE id_cultivo = ?";
         Database::execute($sqlDelete, [$idCultivo]);
 
         // Insertar nuevas relaciones
-        $sqlInsert = "INSERT INTO cultivo_categoria (id_cultivo, id_categoria) VALUES (?, ?)";
         foreach ($categorias as $idCategoria) {
+            $sqlInsert = "INSERT INTO cultivo_categoria (id_cultivo, id_categoria) VALUES (?, ?)";
             Database::execute($sqlInsert, [$idCultivo, $idCategoria]);
         }
+
+        return $idCultivo;
     }
 
     /**
@@ -121,7 +118,6 @@ class Cultivo extends Model
         $cultivo = $this->find($idCultivo);
         if (!$cultivo) return null;
 
-        // Relaciones
         $cultivo['categorias'] = $this->getCategories($idCultivo);
         $cultivo['clima']      = $this->getLastClima($idCultivo);
         $cultivo['documentos'] = $this->getDocumentos($idCultivo);
