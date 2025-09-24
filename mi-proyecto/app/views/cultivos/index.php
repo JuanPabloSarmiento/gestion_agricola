@@ -12,6 +12,27 @@
     <?php unset($_SESSION['error']); ?>
 <?php endif; ?>
 
+
+<?php
+
+
+// Verificar sesión
+$usuario = $_SESSION['usuario'] ?? null;
+if (!$usuario) {
+    $_SESSION['error'] = "Debes iniciar sesión";
+    header("Location: /mi-proyecto/public/index.php?action=login");
+    exit;
+}
+
+// Determinar si es admin
+$esAdmin = ($usuario['id_rol'] == 1);
+
+// Nombre legible del rol
+$roles = [1 => 'Administrador', 2 => 'Empleado', 3 => 'Supervisor'];
+$rolNombre = $roles[$usuario['id_rol']] ?? 'Desconocido';
+?>
+
+
 <h2>Listado de Cultivos</h2>
 
 <a href="/mi-proyecto/public/index.php?action=crear_cultivo">+ Nuevo Cultivo</a>
@@ -35,9 +56,12 @@
                     <td><?= htmlspecialchars($cultivo['variedad']) ?></td>
                     <td><?= htmlspecialchars($cultivo['fecha_inicio']) ?></td>
                     <td>
-                        <a href="/mi-proyecto/public/index.php?action=ver_cultivo&id=<?= $cultivo['id_cultivo'] ?>">Ver</a> |
+                        <a href="/mi-proyecto/public/index.php?action=ver_cultivo&id=<?= $cultivo['id_cultivo'] ?>">Ver</a>
+                        <?php if ($esAdmin): ?>  |
                         <a href="/mi-proyecto/public/index.php?action=editar_cultivo&id=<?= $cultivo['id_cultivo'] ?>">Editar</a> |
                         <a href="/mi-proyecto/public/index.php?action=eliminar_cultivo&id=<?= $cultivo['id_cultivo'] ?>" onclick="return confirm('¿Seguro que deseas eliminar este cultivo?')">Eliminar</a>
+                        <?php endif; ?>
+                        
                     </td>
                 </tr>
             <?php endforeach; ?>

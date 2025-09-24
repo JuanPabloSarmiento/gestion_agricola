@@ -34,13 +34,17 @@ $rolNombre = $roles[$usuario['id_rol']] ?? 'Desconocido';
     <p>Rol: <?= htmlspecialchars($rolNombre) ?></p>
 
     <!-- Botón solo para administradores -->
+    <ul>
+    <li><a href="/mi-proyecto/public/index.php?action=crear_cultivo">Crear Cultivo</a></li>
+    <li><a href="/mi-proyecto/public/index.php?action=cultivos">Ver Cultivos</a></li>
+    <li><a href="/mi-proyecto/public/index.php?action=categorias">Ver Categorías</a></li>
+    </ul>
     <?php if ($esAdmin): ?>
         <ul>
             <li><a href="/mi-proyecto/public/index.php?action=nueva_categoria">Crear Categoría</a></li>
-            <li><a href="/mi-proyecto/public/index.php?action=categorias">Ver Categorías</a></li>
+            
             <li><a href="/mi-proyecto/public/index.php?action=usuarios">Ver Usuarios</a></li>
-            <li><a href="/mi-proyecto/public/index.php?action=crear_cultivo">Crear Cultivo</a></li>
-            <li><a href="/mi-proyecto/public/index.php?action=cultivos">Ver Cultivos</a></li>
+            
         </ul>
             
             

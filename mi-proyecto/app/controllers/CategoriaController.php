@@ -15,22 +15,23 @@ class CategoriaController
     /**
      * Listado de categorías
      */
-    public function index()
-    {
-        // Solo admin
-        if ($_SESSION['role'] !== 'admin') {
-            $_SESSION['error'] = "Acceso denegado.";
-            header("Location: /mi-proyecto/public/index.php?action=dashboard");
-            exit;
-        }
-
-        $categorias = $this->categoriaModel->all();
-        if (!is_array($categorias)) {
-            $categorias = []; // Evita errores en la vista
-        }
-
-        include __DIR__ . '/../views/categorias/index.php';
+public function index()
+{
+    // Solo requiere usuario logueado
+    if (!isset($_SESSION['usuario'])) {
+        $_SESSION['error'] = "Debes iniciar sesión";
+        header("Location: /mi-proyecto/public/index.php?action=login");
+        exit;
     }
+
+    // Obtener todas las categorías
+    $categorias = $this->categoriaModel->all();
+    if (!is_array($categorias)) {
+        $categorias = []; // Evita errores en la vista
+    }
+
+    include __DIR__ . '/../views/categorias/index.php';
+}
 
     /**
      * Formulario de creación

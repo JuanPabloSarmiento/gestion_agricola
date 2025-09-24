@@ -16,7 +16,7 @@
     <input type="text" id="nombre" name="nombre" value="<?= htmlspecialchars($categoria['nombre']); ?>" required>
 
     <!-- Mantener valores obligatorios con hidden -->
-    <input type="hidden" name="tipo" value="<?= htmlspecialchars($categoria['tipo']); ?>">
+    <input type="text" name="tipo" value="<?= htmlspecialchars($categoria['tipo']); ?>">
     <input type="hidden" name="fecha_ingreso" value="<?= htmlspecialchars($categoria['fecha_ingreso']); ?>">
 
     <button type="submit">Actualizar</button>
