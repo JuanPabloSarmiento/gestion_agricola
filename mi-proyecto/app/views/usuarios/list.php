@@ -1,38 +1,46 @@
 <?php
-
 // Verificar sesión
-header("Cache-Control: no-cache, no-store, must-revalidate"); // HTTP 1.1
-header("Pragma: no-cache"); // HTTP 1.0
-header("Expires: 0"); // Proxies
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+header("Cache-Control: no-cache, no-store, must-revalidate");
+header("Pragma: no-cache");
+header("Expires: 0");
+
 if (!isset($_SESSION['usuario'])) {
-    // ✅ Redirige al login mediante el router
     header("Location: /mi-proyecto/public/index.php?action=login");
     exit;
 }
+
+// Mapear roles a nombres
+$roles = [1 => 'Administrador', 2 => 'Empleado', 3 => 'Supervisor'];
+
+ob_start();
 ?>
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Lista de Usuarios</title>
-</head>
-<body>
-    <h1>Usuarios Registrados</h1>
-    <table border="1">
+<h2>Usuarios Registrados</h2>
+
+<table class="table table-bordered table-hover">
+    <thead class="table-dark">
         <tr>
-            <th>ID</th><th>Nombre</th><th>Email</th><th>Rol</th>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Rol</th>
         </tr>
+    </thead>
+    <tbody>
         <?php foreach ($usuarios as $u): ?>
         <tr>
             <td><?= htmlspecialchars($u['id_usuario']) ?></td>
             <td><?= htmlspecialchars($u['nombre']) ?></td>
             <td><?= htmlspecialchars($u['email']) ?></td>
-            <td><?= htmlspecialchars($u['id_rol']) ?></td>
+            <td><?= htmlspecialchars($roles[$u['id_rol']] ?? 'Desconocido') ?></td>
         </tr>
         <?php endforeach; ?>
-    </table>
+    </tbody>
+</table>
 
-    <!-- ✅ Enlace al logout usando el router -->
-    <a href="/mi-proyecto/public/index.php?action=logout">Cerrar sesión</a>
-</body>
-</html>
+<?php
+$content = ob_get_clean();
+include __DIR__ . '/../layouts/main.php';

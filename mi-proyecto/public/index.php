@@ -19,6 +19,7 @@ require_once __DIR__ . '/../app/controllers/AplicacionController.php';
 require_once __DIR__ . '/../app/controllers/InsumoController.php';
 require_once __DIR__ . '/../app/controllers/TrazabilidadController.php';
 require_once __DIR__ . '/../app/controllers/DocumentoController.php';
+require_once __DIR__ . '/../app/controllers/ReporteController.php';
 
 
 // Acción desde la URL
@@ -156,6 +157,9 @@ case 'descargar_documento':
 case 'descargar_informe':
     $id_cultivo = $_GET['id_cultivo'] ?? 0;
     (new DocumentoController())->descargarInforme((int)$id_cultivo);
+    break;
+case 'reporte_comparativo':
+    (new ReporteComparativoController())->comparativo();
     break;
 
     // --- Default ---

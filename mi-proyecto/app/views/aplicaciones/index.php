@@ -1,4 +1,6 @@
-<h2>Aplicaciones del Cultivo</h2>
+<?php ob_start(); ?>
+
+<h2 class="mb-4">Aplicaciones del Cultivo</h2>
 
 <?php if (!empty($_SESSION['success'])): ?>
     <div class="alert alert-success"><?= htmlspecialchars($_SESSION['success']); ?></div>
@@ -10,17 +12,17 @@
     <?php unset($_SESSION['error']); ?>
 <?php endif; ?>
 
-<p>
-  <a href="/mi-proyecto/public/index.php?action=nueva_aplicacion&id_cultivo=<?= htmlspecialchars($id_cultivo) ?>">
-    + Registrar nueva aplicación
-</a>
-</p>
-<p>
-    <a href="/mi-proyecto/public/index.php?action=cultivos">Volver a Cultivos</a>
-</p>
+<div class="mb-3">
+    <a href="/mi-proyecto/public/index.php?action=nueva_aplicacion&id_cultivo=<?= htmlspecialchars($id_cultivo) ?>" class="btn btn-primary">
+        + Registrar nueva aplicación
+    </a>
+    <a href="/mi-proyecto/public/index.php?action=cultivos" class="btn btn-secondary ms-2">
+        Volver a Cultivos
+    </a>
+</div>
 
-<table border="1" cellpadding="5" cellspacing="0">
-    <thead>
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
         <tr>
             <th>ID</th>
             <th>Fecha</th>
@@ -38,24 +40,28 @@
                     <td><?= htmlspecialchars($app['id_aplicacion']) ?></td>
                     <td><?= htmlspecialchars($app['fecha_hora_aplicacion']) ?></td>
                     <td><?= htmlspecialchars($app['usuario']) ?></td>
-                    <td><?= htmlspecialchars($app['clima']) ?></td>
-                    <td><?= htmlspecialchars($app['dosis']) ?></td>
-                    <td><?= htmlspecialchars($app['observaciones']) ?></td>
+                    <td><?= htmlspecialchars($app['clima'] ?? '-') ?></td>
+                    <td><?= htmlspecialchars($app['dosis'] ?? '-') ?></td>
+                    <td><?= htmlspecialchars($app['observaciones'] ?? '-') ?></td>
                     <td>
                         <?php if (!empty($app['insumos'])): ?>
                             <?php foreach ($app['insumos'] as $d): ?>
-                                <?= htmlspecialchars($d['nombre']) ?> (<?= $d['cantidad'] ?>)<br>
+                                <?= htmlspecialchars($d['nombre']) ?> (<?= htmlspecialchars($d['cantidad']) ?>)<br>
                             <?php endforeach; ?>
                         <?php else: ?>
-                            Sin insumos
+                            <span class="text-muted">Sin insumos</span>
                         <?php endif; ?>
                     </td>
                 </tr>
             <?php endforeach; ?>
         <?php else: ?>
             <tr>
-                <td colspan="7">No hay aplicaciones registradas para este cultivo.</td>
+                <td colspan="7" class="text-center">No hay aplicaciones registradas para este cultivo.</td>
             </tr>
         <?php endif; ?>
     </tbody>
 </table>
+
+<?php
+$content = ob_get_clean();
+include __DIR__ . '/../layouts/main.php';

@@ -1,20 +1,52 @@
-<!-- app/views/insumos/create.php -->
+<?php ob_start(); ?>
 
-<h2>Nuevo Insumo</h2>
+<h2 class="mb-4">Nuevo Insumo</h2>
 
-<form action="index.php?controller=insumo&action=store" method="POST">
-    <label>Nombre:</label><br>
-    <input type="text" name="nombre" required><br><br>
+<form action="/mi-proyecto/public/index.php?action=guardar_insumo" method="POST" class="needs-validation" novalidate>
+    <div class="mb-3">
+        <label for="nombre" class="form-label">Nombre:</label>
+        <input type="text" class="form-control" id="nombre" name="nombre" required>
+        <div class="invalid-feedback">
+            El nombre es obligatorio.
+        </div>
+    </div>
 
-    <label>Tipo:</label><br>
-    <input type="text" name="tipo"><br><br>
+    <div class="mb-3">
+        <label for="tipo" class="form-label">Tipo:</label>
+        <input type="text" class="form-control" id="tipo" name="tipo">
+    </div>
 
-    <label>Stock:</label><br>
-    <input type="number" name="stock" value="0" min="0"><br><br>
+    <div class="mb-3">
+        <label for="stock" class="form-label">Stock:</label>
+        <input type="number" class="form-control" id="stock" name="stock" value="0" min="0">
+    </div>
 
-    <label>Fecha de ingreso:</label><br>
-    <input type="date" name="fecha_ingreso" value="<?= date('Y-m-d') ?>"><br><br>
+    <div class="mb-3">
+        <label for="fecha_ingreso" class="form-label">Fecha de ingreso:</label>
+        <input type="date" class="form-control" id="fecha_ingreso" name="fecha_ingreso" value="<?= date('Y-m-d') ?>">
+    </div>
 
-    <button type="submit">Guardar</button>
-    <a href="index.php?controller=insumo&action=index">Cancelar</a>
+    <button type="submit" class="btn btn-success">Guardar</button>
+    <a href="/mi-proyecto/public/index.php?action=insumos" class="btn btn-secondary">Cancelar</a>
 </form>
+
+<script>
+// Validación simple Bootstrap 5
+(() => {
+    'use strict';
+    const forms = document.querySelectorAll('.needs-validation');
+    Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        }, false);
+    });
+})();
+</script>
+
+<?php
+$content = ob_get_clean();
+include __DIR__ . '/../layouts/main.php';

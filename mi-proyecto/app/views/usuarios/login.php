@@ -1,36 +1,41 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Iniciar Sesión</title>
-</head>
-<body>
-    <h1>Login</h1>
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
-    <?php
-    
-    if (isset($_SESSION['error'])) {
-        echo "<p style='color:red'>" . $_SESSION['error'] . "</p>";
-        unset($_SESSION['error']);
-    }
-    if (isset($_SESSION['success'])) {
-        echo "<p style='color:green'>" . $_SESSION['success'] . "</p>";
-        unset($_SESSION['success']);
-    }
-    ?>
+ob_start();
+?>
 
-    <!-- ✅ Ahora con ruta correcta -->
-    <form method="POST" action="/mi-proyecto/public/index.php?action=login">
-        <label>Email:</label>
-        <input type="email" name="email" required><br>
+<h2 class="mb-4">Iniciar Sesión</h2>
 
-        <label>Contraseña:</label>
-        <input type="password" name="contrasena" required><br><br>
+<?php if (isset($_SESSION['error'])): ?>
+    <div class="alert alert-danger"><?= htmlspecialchars($_SESSION['error']) ?></div>
+    <?php unset($_SESSION['error']); ?>
+<?php endif; ?>
 
-        <button type="submit">Ingresar</button>
-    </form>
+<?php if (isset($_SESSION['success'])): ?>
+    <div class="alert alert-success"><?= htmlspecialchars($_SESSION['success']) ?></div>
+    <?php unset($_SESSION['success']); ?>
+<?php endif; ?>
 
-    <!-- ✅ Enlace corregido -->
-    <p>¿No tienes cuenta? <a href="/mi-proyecto/public/index.php?action=registrar">Regístrate aquí</a></p>
-</body>
-</html>
+<form method="POST" action="/mi-proyecto/public/index.php?action=login" class="w-50 mx-auto">
+    <div class="mb-3">
+        <label for="email" class="form-label">Email:</label>
+        <input type="email" id="email" name="email" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="contrasena" class="form-label">Contraseña:</label>
+        <input type="password" id="contrasena" name="contrasena" class="form-control" required>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Ingresar</button>
+</form>
+
+<p class="mt-3 text-center">
+    ¿No tienes cuenta? <a href="/mi-proyecto/public/index.php?action=registrar">Regístrate aquí</a>
+</p>
+
+<?php
+$content = ob_get_clean();
+include __DIR__ . '/../layouts/main.php';

@@ -6,6 +6,18 @@ class Aplicacion
     private string $table = "aplicaciones";
     private string $primaryKey = "id_aplicacion";
 
+
+        public function all(): array
+    {
+        $sql = "SELECT a.*, 
+                       c.nombre AS cultivo, 
+                       u.nombre AS usuario
+                FROM aplicaciones a
+                JOIN cultivos c ON a.id_cultivo = c.id_cultivo
+                JOIN usuarios u ON a.id_usuario = u.id_usuario
+                ORDER BY a.fecha_hora_aplicacion DESC";
+        return Database::select($sql);
+    }
     public function getByCultivo(int $id_cultivo): array
 {
     $sql = "SELECT a.*, u.nombre AS usuario
