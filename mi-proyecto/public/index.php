@@ -1,4 +1,10 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+session_start();
+?>
+<?php
 // public/index.php
 
 if (session_status() == PHP_SESSION_NONE) {
@@ -9,6 +15,10 @@ if (session_status() == PHP_SESSION_NONE) {
 require_once __DIR__ . '/../app/controllers/UsuarioController.php';
 require_once __DIR__ . '/../app/controllers/CultivoController.php';
 require_once __DIR__ . '/../app/controllers/CategoriaController.php';
+require_once __DIR__ . '/../app/controllers/AplicacionController.php';
+require_once __DIR__ . '/../app/controllers/InsumoController.php';
+require_once __DIR__ . '/../app/controllers/TrazabilidadController.php';
+require_once __DIR__ . '/../app/controllers/DocumentoController.php';
 
 
 // Acción desde la URL
@@ -84,6 +94,69 @@ case 'eliminar_categoria':
     (new CategoriaController())->destroy($id);
     break;
 
+    // --- Aplicaciones ---
+case 'ver_aplicaciones':
+    $id_cultivo = isset($_GET['id_cultivo']) ? (int) $_GET['id_cultivo'] : 0;
+    (new AplicacionController())->index($id_cultivo);
+    break;
+
+case 'nueva_aplicacion':
+    $id_cultivo = isset($_GET['id_cultivo']) ? (int) $_GET['id_cultivo'] : 0;
+    (new AplicacionController())->create($id_cultivo);
+    break;
+
+case 'guardar_aplicacion':
+    $id_cultivo = isset($_GET['id_cultivo']) ? (int) $_GET['id_cultivo'] : 0;
+    (new AplicacionController())->store($id_cultivo);
+    break;
+    // --- Insumos ---
+   
+case 'insumos':
+    (new InsumoController())->index();
+    break;
+
+case 'crear_insumo':
+    (new InsumoController())->create();
+    break;
+
+case 'guardar_insumo':
+    (new InsumoController())->store();
+    break;
+
+case 'editar_insumo':
+    $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+    (new InsumoController())->edit($id);
+    break;
+
+case 'actualizar_insumo':
+    $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+    (new InsumoController())->update($id);
+    break;
+
+case 'eliminar_insumo':
+    $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+    (new InsumoController())->destroy($id);
+    break;
+
+    // --- Trazabilidad ---
+    case 'ver_trazabilidad':
+    $token = $_GET['token'] ?? '';
+    (new TrazabilidadController())->verTrazabilidad($token);
+    break;
+
+case 'subir_documento':
+    $id_cultivo = $_GET['id_cultivo'] ?? 0;
+    (new DocumentoController())->subir($id_cultivo);
+    break;
+case 'descargar_documento':
+    $id_documento = $_GET['id_documento'] ?? 0;
+    (new DocumentoController())->descargar($id_documento);
+    break;
+
+case 'descargar_informe':
+    $id_cultivo = $_GET['id_cultivo'] ?? 0;
+    (new DocumentoController())->descargarInforme((int)$id_cultivo);
+    break;
 
     // --- Default ---
     default:

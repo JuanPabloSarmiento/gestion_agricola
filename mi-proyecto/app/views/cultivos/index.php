@@ -61,7 +61,6 @@ $rolNombre = $roles[$usuario['id_rol']] ?? 'Desconocido';
                         <a href="/mi-proyecto/public/index.php?action=editar_cultivo&id=<?= $cultivo['id_cultivo'] ?>">Editar</a> |
                         <a href="/mi-proyecto/public/index.php?action=eliminar_cultivo&id=<?= $cultivo['id_cultivo'] ?>" onclick="return confirm('¿Seguro que deseas eliminar este cultivo?')">Eliminar</a>
                         <?php endif; ?>
-                        
                     </td>
                 </tr>
             <?php endforeach; ?>

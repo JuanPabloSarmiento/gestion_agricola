@@ -114,15 +114,26 @@ class Cultivo extends Model
      * Devuelve un cultivo con todas sus relaciones
      */
     public function findWithRelations(int $idCultivo): ?array
+{
+    $cultivo = $this->find($idCultivo);
+    if (!$cultivo) return null;
+
+    $cultivo['categorias'] = $this->getCategories($idCultivo);
+    $cultivo['clima']      = $this->getLastClima($idCultivo);
+    $cultivo['documentos'] = $this->getDocumentos($idCultivo);
+
+    // Traemos el QR
+    $qr = $this->getQr($idCultivo); // Devuelve un array con token o null
+    $cultivo['qr'] = $qr;
+    $cultivo['token'] = $qr['token'] ?? null; // Campo que usará la vista para trazabilidad
+
+    return $cultivo;
+}
+
+     public function closeCycle(int $id_cultivo)
     {
-        $cultivo = $this->find($idCultivo);
-        if (!$cultivo) return null;
-
-        $cultivo['categorias'] = $this->getCategories($idCultivo);
-        $cultivo['clima']      = $this->getLastClima($idCultivo);
-        $cultivo['documentos'] = $this->getDocumentos($idCultivo);
-        $cultivo['qr']         = $this->getQr($idCultivo);
-
-        return $cultivo;
+        $sql = "UPDATE {$this->table} SET fecha_fin = CURDATE() WHERE id_cultivo = ?";
+        return Database::execute($sql, [$id_cultivo]);
     }
 }
+

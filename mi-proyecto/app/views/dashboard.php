@@ -42,7 +42,7 @@ $rolNombre = $roles[$usuario['id_rol']] ?? 'Desconocido';
     <?php if ($esAdmin): ?>
         <ul>
             <li><a href="/mi-proyecto/public/index.php?action=nueva_categoria">Crear Categoría</a></li>
-            
+            <li><a href="/mi-proyecto/public/index.php?action=insumos">Ver Insumos</a></li>
             <li><a href="/mi-proyecto/public/index.php?action=usuarios">Ver Usuarios</a></li>
             
         </ul>
